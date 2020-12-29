@@ -1,0 +1,28 @@
+<div class="p-grid" id = "mychat-header">
+    <div class="p-col-4 p-offset-4">
+        <h1 id = "mychat-title">myChat</h1>
+    </div>
+    <div class="p-col-4">
+        <h6 id = "mychat-title">{{chatUser.name}}</h6>
+    </div>
+</div>
+<br><br>
+<div class = "p-grid" id = "chat-body">
+    
+    <div class = "p-col-2" id = "chat-left-col">
+        <app-users-box 
+        (userListClickedEvent) = "userClicked($event)"
+        [chatUsersList] = "chatUsersList"
+        >
+        </app-users-box>
+    </div>
+    <div class = "p-col-8" id = "chat-message">
+        <app-chat-box
+        (sendMessageClickedEvent) = "publishMessage($event)"
+        [chatMessageList] = "chatMessageList"
+        ></app-chat-box>
+    </div>
+    <div class = "p-col-2" id = "chat-right-col">coluna direita</div>
+    
+</div>
+

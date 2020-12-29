@@ -1,0 +1,17 @@
+#mychat-header{
+    background-color: black;
+}
+
+#mychat-title{
+    color: white;
+    align-items: center;
+    width: 50%;
+    padding-left: 25%;
+}
+
+#mychat-formBody{
+    width: 50%;
+    padding-left: 25%;
+    padding-top: 5em;
+}
+

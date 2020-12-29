@@ -1,0 +1,24 @@
+
+
+<div id="chat-box">
+    <div id="chat-box-list">
+        <ul class = "messageList" *ngIf = "chatMessageList">
+            <li *ngFor = "let message of chatMessageList">
+                <app-chat-message 
+                [messageText] = message.messageText
+                [messageDate] = message.sendDate
+                [userSender] = message.userSender
+                >
+                </app-chat-message>
+            </li>
+        </ul>
+    </div>
+    <br><br>
+    <div id="chat-box-edit">
+        <textarea rows="5" cols="60" class = "message-text-area" [(ngModel)]="chatMessageEdit"></textarea>
+        <br><br>
+        <p-button label="Enviar" styleClass="p-button-sm" (click)="onSend()"></p-button>
+    </div>
+</div>
+
+

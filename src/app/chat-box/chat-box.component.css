@@ -1,0 +1,25 @@
+#chat-box{
+    border: 1px solid black;
+    width: 100%;
+}
+
+#chat-box-list{
+    border: 1px solid black;
+    height: 350px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+ul.messageList {
+    list-style-type: none;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+textarea.message-text-area{
+    width: 100%;
+    height: 90px;
+    resize: none;
+    overflow-y: scroll;
+}

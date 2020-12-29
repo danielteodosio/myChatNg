@@ -1,0 +1,39 @@
+<div class="p-grid" id = "mychat-header">
+    <div class="p-col-4 p-offset-4">
+        <h1 id = "mychat-title">myChat</h1>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="p-col-4 p-offset-4">
+        <div id = "mychat-formBody">
+            <label for="mychat-email-login">Email: </label>
+            <input id = "mychat-email-login" type="text"  pInputText [(ngModel)]="loginForm.email"/>
+            <br><br>
+            <label for="mychat-password-login">Senha: </label>
+            <input id="mychat-password-login" type="password"  pPassword [(ngModel)]="loginForm.password"/>
+            <br><br>
+            <button pButton type="button" label="Entrar" (click)="login()"></button>
+            <br><br><br><br>
+            <button pButton type="button" label="Cadastrar" class="p-button-sm p-button-text" (click)="signin()"></button>
+        </div>
+
+    </div>
+</div>
+
+<p-dialog header="Cadastro" [(visible)]="display" [style] = "{width:'25%'}">
+<div>
+    Email: <br>
+    <input type="text" class="p-inputtext-lg" pInputText [(ngModel)]="user.email"/>
+    <br><br>
+    Nome: <br>
+    <input  type="text" class="p-inputtext-lg" pInputText [(ngModel)]="user.name"/>
+    <br><br>
+    hobbie: <br>
+    <input  type="text" class="p-inputtext-lg" pInputText [(ngModel)]="user.hobbie"/>
+    <br><br>
+    Senha: <br>
+    <input type="password" class="p-inputtext-lg" pPassword [(ngModel)]="user.password"/>
+    <br><br>
+    <button pButton type="button" label="Cadastrar" class="p-button-sm" (onHide)= "handleHideSubmit()" (click)="submitSigninData()"></button>
+</div>
+</p-dialog>

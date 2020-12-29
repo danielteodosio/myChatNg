@@ -1,0 +1,19 @@
+#user-box{
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+}
+
+#user-box-list{
+    border: 1px solid black;
+    height: 350px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+ul.userList {
+    list-style-type: none;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
