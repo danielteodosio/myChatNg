@@ -65,19 +65,9 @@ export class ChatPageComponent implements OnInit {
         console.log(message);
         console.log(this.convertUint8ArrayToString(message._binaryBody));
         
-        let messageToTravel:MessageTravelModel = JSON.parse(this.convertUint8ArrayToString(message._binaryBody));
-        console.log(messageToTravel);
-
-        let chatMessage:ChatMessageModel = new ChatMessageModel();
-        chatMessage.messageText = messageToTravel.bodyMessage;
-        chatMessage.userSender = messageToTravel.senderName;
-        chatMessage.sendDate = new Date();
-        chatMessage.userSenderId = messageToTravel.senderId;
-        chatMessage.userReceiverId = this.chatUser.id;
-        //this.chatMessageList.push(chatMessage);
-        this.chatMessageService.saveSendedMessage(chatMessage).subscribe((result:any)=>{
+        let senderId:number = parseInt(this.convertUint8ArrayToString(message._binaryBody));
           this.chatMessageList = [];
-          this.chatMessageService.getSendedMessageBySenderAndReceiver(chatMessage.userSenderId, this.chatUser.id).subscribe((messages:any[])=>{
+          this.chatMessageService.getSendedMessageBySenderAndReceiver(senderId, this.chatUser.id).subscribe((messages:any[])=>{
             messages.forEach((message:any)=>{
               if(!!this.userContactId && (this.userContactId == message.userSendedMessage.id || this.userContactId == message.userContactSendedMessage.id)){
                 console.log(message);
@@ -89,7 +79,7 @@ export class ChatPageComponent implements OnInit {
               }
             });
           });
-        });
+        //});
 
       });
       
@@ -123,12 +113,16 @@ export class ChatPageComponent implements OnInit {
   });
 }
   publishMessage(messageToPublish:string){
-    let messageToTravel:MessageTravelModel = new MessageTravelModel();
-    messageToTravel.senderName = this.chatUser.name;
-    messageToTravel.senderId = this.chatUser.id;
-    messageToTravel.bodyMessage = messageToPublish;
-    console.log(JSON.stringify(messageToTravel));
-    this.rxStomp.publish({ destination: this.mountUrlBrokerToPub(this.URL_BROKER_ROOT_PUB, this.userContactId.toString()), body: JSON.stringify(messageToTravel)});
+    let chatMessage:ChatMessageModel = new ChatMessageModel();
+    //messageToTravel.senderName = this.chatUser.name;
+    chatMessage.userSenderId = this.chatUser.id;
+    chatMessage.userReceiverId = this.userContactId;
+    chatMessage.messageText = messageToPublish;
+    chatMessage.sendDate = new Date();
+    chatMessage.userSender = this.chatUser.name;
+    this.chatMessageList.push(chatMessage);
+    console.log(JSON.stringify(chatMessage));
+    this.rxStomp.publish({ destination: this.mountUrlBrokerToPub(this.URL_BROKER_ROOT_PUB, this.userContactId.toString()), body: JSON.stringify(chatMessage)});
   }
   mockMessageList(sender:string, receiver:string):void{
     this.chatMessageList = [];
