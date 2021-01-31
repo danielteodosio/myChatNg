@@ -6,11 +6,17 @@
         <h6 id = "mychat-title">{{chatUser.name}}</h6>
     </div>
 </div>
-<br><br>
 <div class = "p-grid" id = "chat-body">
-    
+
+    <div class = "p-col-12">
+      <p-toolbar>
+        <div class="p-toolbar-group-right">
+          <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text p-button-sm" (click) = "onExit()"></button>
+        </div>
+      </p-toolbar>
+    </div>
     <div class = "p-col-2" id = "chat-left-col">
-        <app-users-box 
+        <app-users-box
         (userListClickedEvent) = "userClicked($event)"
         [chatUsersList] = "chatUsersList"
         >
@@ -23,6 +29,6 @@
         ></app-chat-box>
     </div>
     <div class = "p-col-2" id = "chat-right-col">coluna direita</div>
-    
+
 </div>
 

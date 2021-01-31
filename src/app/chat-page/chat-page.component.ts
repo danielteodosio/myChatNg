@@ -8,9 +8,8 @@ import {Message} from '@stomp/stompjs';
 import {RxStomp} from '@stomp/rx-stomp';
 import { Subscription } from 'rxjs';
 import { ChatUserModel } from '../chat-user/chat-user-model';
-import {MessageTravelModel} from '../chat-message/chat-message-model';
 import {ChatMessageService} from '../chat-message/chat-message-service.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -18,7 +17,7 @@ import {ChatMessageService} from '../chat-message/chat-message-service.service';
 })
 export class ChatPageComponent implements OnInit {
 
-  
+
   @ViewChild(UsersBoxComponent) usersBox:UsersBoxComponent;
   @ViewChild(ChatBoxComponent) chatBox:ChatBoxComponent;
   chatUser:User = new User();
@@ -46,7 +45,7 @@ export class ChatPageComponent implements OnInit {
         }
 
 
-  constructor(private chatPageService:ChatPageService, private chatMessageService:ChatMessageService) { 
+  constructor(private router:Router, private chatPageService:ChatPageService, private chatMessageService:ChatMessageService) {
 
   }
 
@@ -64,7 +63,7 @@ export class ChatPageComponent implements OnInit {
       .subscribe((message: any) => {
         console.log(message);
         console.log(this.convertUint8ArrayToString(message._binaryBody));
-        
+
         let senderId:number = parseInt(this.convertUint8ArrayToString(message._binaryBody));
           this.chatMessageList = [];
           this.chatMessageService.getSendedMessageBySenderAndReceiver(senderId, this.chatUser.id).subscribe((messages:any[])=>{
@@ -82,7 +81,7 @@ export class ChatPageComponent implements OnInit {
         //});
 
       });
-      
+
     });
     this.chatPageService.getAllUsers().subscribe((users:User[])=>{
       users.forEach((user:User)=>{
@@ -98,6 +97,13 @@ export class ChatPageComponent implements OnInit {
 
     );
   }
+
+  onExit(){
+    localStorage.setItem("userEmail", "");
+    localStorage.setItem("userPass", "");
+    this.router.navigate(["/login"]);
+  }
+
   userClicked(userContactIdEvent:number){
     this.chatMessageList = [];
     this.userContactId = userContactIdEvent;
@@ -126,7 +132,7 @@ export class ChatPageComponent implements OnInit {
   }
   mockMessageList(sender:string, receiver:string):void{
     this.chatMessageList = [];
-    let numElements:number = 5; 
+    let numElements:number = 5;
     for(var i = 0; i < numElements; i++){
       let chatMessage:ChatMessageModel = new ChatMessageModel();
       chatMessage.messageText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";

@@ -10,6 +10,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
+import { ToolbarModule } from 'primeng/toolbar';
 import {HttpClientModule} from '@angular/common/http';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
@@ -46,7 +47,8 @@ import { AuthGuardService } from "./guards/auth-guard.service";
     DialogModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToolbarModule
   ],
   providers: [
     {

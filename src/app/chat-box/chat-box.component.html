@@ -1,10 +1,10 @@
 
 
 <div id="chat-box">
-    <div id="chat-box-list">
+    <div id="chat-box-list" #chatBoxList>
         <ul class = "messageList" *ngIf = "chatMessageList">
             <li *ngFor = "let message of chatMessageList">
-                <app-chat-message 
+                <app-chat-message
                 [messageText] = message.messageText
                 [messageDate] = message.sendDate
                 [userSender] = message.userSender
