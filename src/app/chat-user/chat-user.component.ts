@@ -10,19 +10,19 @@ export class ChatUserComponent implements OnInit {
   @Input() userName:string;
   @Input() userId:number;
   @Input() isUserConnected:boolean;
-  @Input() hasUserNewMessage:boolean;
+  @Input() numberOfNewMessages:number;
   @Output() userClickedEvent = new EventEmitter<number>();
 
-  constructor() { 
-    
+  constructor() {
+
   }
 
   ngOnInit(): void {
-    
+
   }
 
   notifyUserClicked(userId: number):void{
     this.userClickedEvent.emit(userId);
   }
-    
+
 }

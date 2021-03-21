@@ -4,11 +4,15 @@ export class ChatMessageModel {
     userSender:string;
     sendDate:Date;
     messageText:string;
+    messageId:number;
 }
 export class MessageTravelModel{
     senderName:string;
     senderId:number;
     bodyMessage:string;
 }
-//private Integer userSenderId;
-//private Integer userReceiverId;
+
+export class MessageIdsToUpdateModel{
+  idsToUpdate:number[];
+}
+

@@ -9,10 +9,10 @@ import {LoginService} from './login-service.service';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
-  
+
   loginForm:LoginForm;
   user:User;
-  
+
   display: boolean;
   constructor(private loginService:LoginService, private router:Router) { }
 
@@ -43,6 +43,7 @@ export class LoginPageComponent implements OnInit {
     this.loginService.submitSigninData(this.user).subscribe((res:any) => {
       console.log(this.user);
       console.log(res);
+      this.display = false;
     });
   }
   handleHideSubmit(){

@@ -61,27 +61,29 @@ export class ChatPageComponent implements OnInit {
       this.topicSubscription = this.rxStomp
       .watch(this.mountUrlBrokerToSub(this.URL_BROKER_ROOT_SUB, this.chatUser.id.toString()))
       .subscribe((message: any) => {
-        console.log(message);
-        console.log(this.convertUint8ArrayToString(message._binaryBody));
+          console.log(message);
+          console.log(this.convertUint8ArrayToString(message._binaryBody));
 
-        let senderId:number = parseInt(this.convertUint8ArrayToString(message._binaryBody));
-          this.chatMessageList = [];
-          this.chatMessageService.getSendedMessageBySenderAndReceiver(senderId, this.chatUser.id).subscribe((messages:any[])=>{
-            messages.forEach((message:any)=>{
-              if(!!this.userContactId && (this.userContactId == message.userSendedMessage.id || this.userContactId == message.userContactSendedMessage.id)){
-                console.log(message);
-                let chatMessage:ChatMessageModel = new ChatMessageModel();
-                chatMessage.userSender = message.userSendedMessage.name;
-                chatMessage.messageText = message.sendedMessageText;
-                chatMessage.sendDate = message.sendedMessageDate;
-                this.chatMessageList.push(chatMessage);
-              }
+          let senderId:number = parseInt(this.convertUint8ArrayToString(message._binaryBody));
+          if(!!this.userContactId && (this.userContactId == message.userSendedMessage.id || this.userContactId == message.userContactSendedMessage.id)){
+            this.chatMessageList = [];
+            this.chatMessageService.getSendedMessageBySenderAndReceiver(senderId, this.chatUser.id).subscribe((messages:any[])=>{
+              messages.forEach((message:any)=>{
+                //if(!!this.userContactId && (this.userContactId == message.userSendedMessage.id || this.userContactId == message.userContactSendedMessage.id)){
+                  console.log(message);
+                  let chatMessage:ChatMessageModel = new ChatMessageModel();
+                  chatMessage.userSender = message.userSendedMessage.name;
+                  chatMessage.messageText = message.sendedMessageText;
+                  chatMessage.sendDate = message.sendedMessageDate;
+                  chatMessage.messageId = message.id;
+                  this.chatMessageList.push(chatMessage);
+                //}
+              });
             });
-          });
-        //});
-
+          }else{
+            this.updateContactNumberOfNewMessages(senderId,this.chatUser.id);
+          }
       });
-
     });
     this.chatPageService.getAllUsers().subscribe((users:User[])=>{
       users.forEach((user:User)=>{
@@ -89,6 +91,7 @@ export class ChatPageComponent implements OnInit {
         chatUser.id = user.id;
         chatUser.userName = user.name;
         chatUser.userConnectionStatus = true;
+        chatUser.numberOfNewMessages = 0;
         this.chatUsersList.push(chatUser);
       });
       console.log("ChatUserList");
@@ -96,6 +99,12 @@ export class ChatPageComponent implements OnInit {
     }
 
     );
+  }
+
+  updateContactNumberOfNewMessages(senderId:number, receiverId:number){
+    this.chatMessageService.getSenderNotReadedMessages(senderId, receiverId).subscribe(number => {
+      this.chatUsersList.filter(user => user.id == senderId)[0].numberOfNewMessages = number;
+    });
   }
 
   onExit(){
@@ -114,9 +123,14 @@ export class ChatPageComponent implements OnInit {
           chatMessage.userSender = message.userSendedMessage.name;
           chatMessage.messageText = message.sendedMessageText;
           chatMessage.sendDate = message.sendedMessageDate;
+          chatMessage.messageId = message.id;
           this.chatMessageList.push(chatMessage);
      });
-  });
+    });
+    this.chatMessageService.updateMessagesToReadedBySenderAndReceiver(userContactIdEvent, this.chatUser.id).subscribe(()=>{
+      this.updateContactNumberOfNewMessages(userContactIdEvent, this.chatUser.id);
+    }
+    );
 }
   publishMessage(messageToPublish:string){
     let chatMessage:ChatMessageModel = new ChatMessageModel();
@@ -130,17 +144,7 @@ export class ChatPageComponent implements OnInit {
     console.log(JSON.stringify(chatMessage));
     this.rxStomp.publish({ destination: this.mountUrlBrokerToPub(this.URL_BROKER_ROOT_PUB, this.userContactId.toString()), body: JSON.stringify(chatMessage)});
   }
-  mockMessageList(sender:string, receiver:string):void{
-    this.chatMessageList = [];
-    let numElements:number = 5;
-    for(var i = 0; i < numElements; i++){
-      let chatMessage:ChatMessageModel = new ChatMessageModel();
-      chatMessage.messageText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
-      chatMessage.sendDate = new Date();
-      chatMessage.userSender = sender + ' ' + 'para' + ' ' + receiver;
-      this.chatMessageList.push(chatMessage);
-    }
-  }
+
 
   //fodase o @sendtouser
   mountUrlBrokerToSub(subRootUrl:string, userId:string):string{

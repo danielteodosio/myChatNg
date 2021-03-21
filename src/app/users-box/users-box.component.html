@@ -4,10 +4,11 @@
     <div id="user-box-list">
         <ul class = "userList" *ngIf = "chatUsersList">
             <li *ngFor = "let user of chatUsersList">
-                <app-chat-user 
+                <app-chat-user
                     [userName] = user.userName
                     [userId] = user.id
                     [isUserConnected] = user.userConnectionStatus
+                    [numberOfNewMessages] = user.numberOfNewMessages
                     (userClickedEvent) = "notifyUserClicked($event)"
                 >
                 </app-chat-user>

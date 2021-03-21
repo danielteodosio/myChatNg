@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<p-dialog header="Cadastro" [(visible)]="display" [style] = "{width:'25%'}">
+<p-dialog header="Cadastro" [(visible)]="display" [style] = "{width:'25%'}" (onHide)= "handleHideSubmit()">
 <div>
     Email: <br>
     <input type="text" class="p-inputtext-lg" pInputText [(ngModel)]="user.email"/>
@@ -34,6 +34,6 @@
     Senha: <br>
     <input type="password" class="p-inputtext-lg" pPassword [(ngModel)]="user.password"/>
     <br><br>
-    <button pButton type="button" label="Cadastrar" class="p-button-sm" (onHide)= "handleHideSubmit()" (click)="submitSigninData()"></button>
+    <button pButton type="button" label="Cadastrar" class="p-button-sm"  (click)="submitSigninData()"></button>
 </div>
 </p-dialog>
