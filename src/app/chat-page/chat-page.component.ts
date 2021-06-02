@@ -65,7 +65,7 @@ export class ChatPageComponent implements OnInit {
           console.log(this.convertUint8ArrayToString(message._binaryBody));
 
           let senderId:number = parseInt(this.convertUint8ArrayToString(message._binaryBody));
-          if(!!this.userContactId && (this.userContactId == message.userSendedMessage.id || this.userContactId == message.userContactSendedMessage.id)){
+          if(!!this.userContactId && this.userContactId == senderId){
             this.chatMessageList = [];
             this.chatMessageService.getSendedMessageBySenderAndReceiver(senderId, this.chatUser.id).subscribe((messages:any[])=>{
               messages.forEach((message:any)=>{
