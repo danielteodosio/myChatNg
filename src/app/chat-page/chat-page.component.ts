@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { ChatUserModel } from '../chat-user/chat-user-model';
 import {ChatMessageService} from '../chat-message/chat-message-service.service';
 import { Router } from '@angular/router';
+import { NUMBER_TYPE } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -84,26 +85,47 @@ export class ChatPageComponent implements OnInit {
             this.updateContactNumberOfNewMessages(senderId,this.chatUser.id);
           }
       });
-    });
-    this.chatPageService.getAllUsers().subscribe((users:User[])=>{
-      users.forEach((user:User)=>{
-        let chatUser:ChatUserModel = new ChatUserModel();
-        chatUser.id = user.id;
-        chatUser.userName = user.name;
-        chatUser.userConnectionStatus = true;
-        chatUser.numberOfNewMessages = 0;
-        this.chatUsersList.push(chatUser);
-      });
-      console.log("ChatUserList");
-      console.log(this.chatUsersList);
-    }
+      this.chatPageService.getAllUsers().subscribe((users:User[])=>{
+        users.forEach((user:User)=>{
+          let chatUser:ChatUserModel = new ChatUserModel();
+          chatUser.id = user.id;
+          chatUser.userName = user.name;
+          chatUser.userConnectionStatus = true;
+          chatUser.numberOfNewMessages = 0;
+          this.chatUsersList.push(chatUser);
+        });
+        this.updateContactNumberOfNewMessagesOnInit(this.chatUser.id, users);
+      }
 
-    );
+      );
+    });
+
   }
 
   updateContactNumberOfNewMessages(senderId:number, receiverId:number){
-    this.chatMessageService.getSenderNotReadedMessages(senderId, receiverId).subscribe(number => {
-      this.chatUsersList.filter(user => user.id == senderId)[0].numberOfNewMessages = number;
+    this.chatMessageService.getSenderNotReadedMessagesByUserId(receiverId).subscribe(responses => {
+      let sendedMessages: any[] = Array<any>();
+      let number_messages = 0;
+      sendedMessages = responses.filter(element => element.senderId == senderId);
+      if(sendedMessages.length > 0){
+        number_messages = sendedMessages[0].numberOfMessages;
+      }
+      this.chatUsersList.filter(user => user.id == senderId)[0].numberOfNewMessages = number_messages;
+    });
+  }
+
+  updateContactNumberOfNewMessagesOnInit(receiverId:number, users:User[]){
+    this.chatMessageService.getSenderNotReadedMessagesByUserId(receiverId).subscribe(responses => {
+        users.forEach(user => {
+          let sendedMessages:any[] = Array<any>();
+          let numberOfMessages:number = 0;
+          sendedMessages = responses.filter(element => element.senderId == user.id);
+          if(sendedMessages.length > 0){
+            numberOfMessages = sendedMessages[0].numberOfMessages;
+          }
+          this.chatUsersList.filter(chatUser => chatUser.id == user.id)[0].numberOfNewMessages = numberOfMessages;
+        });
+
     });
   }
 

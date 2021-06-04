@@ -26,4 +26,7 @@ export class ChatMessageService {
   getSenderNotReadedMessages(senderId:number, receiverId:number):Observable<any>{
     return this.httpClient.get<any>(this.url + 'getSenderNotReadedMessages?' + 'senderId=' + senderId + '&' + 'receiverId=' + receiverId);
   }
+  getSenderNotReadedMessagesByUserId(receiverId:number):Observable<any>{
+    return this.httpClient.get<any>(this.url + '/getNotReadedMessageByUserId?' + 'receiverId=' + receiverId);
+  }
 }
